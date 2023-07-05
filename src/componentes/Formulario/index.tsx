@@ -1,15 +1,13 @@
 import { useState } from 'react'
+import { IColaborador } from '../../compartilhado/interfaces/IColaborador'
 import Botao from '../Botao'
 import CampoTexto from '../CampoTexto'
 import ListaSuspensa from '../ListaSuspensa'
 import './Formulario.css'
-import { IColaborador } from '../../shared/interfaces/IColaborador'
 
 interface FormularioProps {
-    times: string[]
     aoColaboradorCadastrado: (colaborador: IColaborador) => void
-    
-    
+    times: string[]
 }
 
 const Formulario = (props: FormularioProps) => {
@@ -18,14 +16,16 @@ const Formulario = (props: FormularioProps) => {
     const [cargo, setCargo] = useState('')
     const [imagem, setImagem] = useState('')
     const [time, setTime] = useState('')
+    const [data, setData] = useState('')
 
-    const aoSalvar = (evento: React.FormEvent<HTMLFormElement>) => {
+    const aoSalvar = (evento: React.FormEvent<HTMLFormElement> ) => {
         evento.preventDefault()
         props.aoColaboradorCadastrado({
             nome,
             cargo,
             imagem,
-            time
+            time,
+            data
         })
         setNome('')
         setCargo('')
@@ -35,7 +35,7 @@ const Formulario = (props: FormularioProps) => {
 
     return (
         <section className="formulario">
-            <form onSubmit={aoSalvar}>
+            <form onSubmit={evento => aoSalvar(evento)}>
                 <h2>Preencha os dados para criar o card do colaborador</h2>
                 <CampoTexto 
                     obrigatorio={true}
@@ -52,11 +52,17 @@ const Formulario = (props: FormularioProps) => {
                     aoAlterado={valor => setCargo(valor)}
                 />
                 <CampoTexto
-                    obrigatorio={true}
                     label="Imagem"
                     placeholder="Digite o endereço da imagem" 
                     valor={imagem}
                     aoAlterado={valor => setImagem(valor)}
+                />
+                <CampoTexto
+                    label='Data de entrada no time'
+                    placeholder=''
+                    valor={data}
+                    aoAlterado={valor => setData(valor)}
+                    tipo="date"
                 />
                 <ListaSuspensa
                     obrigatorio={true}
